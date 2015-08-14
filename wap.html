@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta charset="utf-8">
+    <title>移动端测试</title>
+    <style>
+        *{margin:0;padding:0;}
+        html{
+            width:100%;
+            overflow:hidden;
+        }
+        body{
+            min-height: 50rem;
+            width:100%;
+            overflow:hidden;
+        }
+        .textL, .textR{
+            margin-top:10rem;
+        }
+        .textR{
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 id="title" data-sr="" class="textL">测试标题</h1>
+        <h1 data-sr="enter x|100px s|.2 wait 1s over .8s" class="textR">测试标题2</h1>
+        <h1 data-sr="enter x|-100px r|45deg" class="textL">测试标题3</h1>
+        <h1 data-sr="enter x|100px y|50px wait 1.5s over .6s" class="textR">测试标题4</h1>
+        <h1 data-sr="enter x|-100px r|60deg s|1.1" class="textL">测试标题5</h1>
+        <h1 data-sr="enter x|100px s|.2 wait 2s over 3s" class="textR">测试标题6</h1>
+        <h1 data-sr="enter x|-100px y|20% s|.1 r|10deg" class="textL">测试标题7</h1>
+        <h1 data-sr="enter x|100px y|20px s|2 r|-5deg over 2s" class="textR">测试标题8</h1>
+    </div>
+</body>
+<script src="css3Transition.js"></script>
+<script src="scrollEnter.js"></script>
+<script src="scrollTransition.js"></script>
+<script type="text/javascript">
+    // window.onerror = function(e){
+    //     alert(e);
+    // };
+    // var c3 = new Css3Transition({
+    //     key: "data-sr"
+    // });
+    // setTimeout(function(){
+    //     c3.enter();
+    // }, 1000);
+    // setTimeout(function(){
+    //     c3.leave();
+    // }, 7000);
+    // 移动端使用 滚动，加载动画，并不是一个很好的选择
+    var st = new ScrollTransition({
+        percent: 0
+    });
+    // var title = document.getElementById("title");
+    // alert(title.getAttribute("style"));
+
+    setTimeout(function(){
+        // st.c3.leave(document.getElementById("title"));
+        // alert(title.getAttribute("style"));
+        // // return;
+        // title.setAttribute("style",'\
+        //     -webkit-transition:-webkit-transform 5s ease 0s, opacity 5s ease 0s;\
+        //     transition:transform 5s ease 0s, opacity 5s ease 0s; \
+        //     -webkit-transform: translateX(0) translateY(100%);\
+        //     transform: translateX(0) translateY(100%);\
+        //     opacity: 1;\
+        //     '
+        // );
+    }, 1000);
+
+</script>
+</html>

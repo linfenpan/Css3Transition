@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>写个domo玩玩</title>
+    <style>
+        *{margin:0;padding:0;}
+        body{
+            background:#1A2434;
+            font-family: arial, sans-serif;
+            -webkit-perspective: 1200px;
+                    perspective: 1200px;
+        }
+        .header{
+            margin-top:3rem;
+            color:#fff;
+            font-size:3.66rem;
+            text-align:center;
+        }
+        .part{
+            display:-webkit-box;
+            display:-webkit-flex;
+            display:-ms-flexbox;
+            display:flex;
+
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+                -ms-flex-pack: center;
+
+                    justify-content: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+                -ms-flex-align: center;
+                    align-items: center;
+
+            width:860px;
+            min-height: 400px;
+            margin:5rem auto 0 auto;
+        }
+        .part .text{
+            -webkit-box-flex:1;
+            -webkit-flex:1;
+                -ms-flex:1;
+                    flex:1;
+
+            padding:0 2rem;
+            color:#fff;
+        }
+        .part .image{
+            max-width: 40%;
+            border:none;
+            border-radius:2%;
+            box-shadow:5px 5px 10px #616c84;
+        }
+        .part .title{
+            font-size:2.5rem;
+        }
+        .part .desc{
+            font-size:1.4rem;
+            line-height: 2.2rem;
+            color:#77849E;
+            word-wrap: break-word;
+            /*word-break: break-all;*/
+        }
+        .part .code{
+            display:block;
+            margin:1rem 0;
+            background:#222;
+            color:#fff;
+            border-radius:6px;
+            padding:1rem;
+        }
+        .footer{
+            text-align: center;
+            color:#616c84;
+            font-weight:bold;
+            font-family: Tahoma;
+            font-size:2.8rem;
+        }
+        .footer a{
+            color:#616c84;
+        }
+        .footer .text{
+            vertical-align:top;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="header" data-sr="enter y|-100% tf ease-in">
+        <span data-sr="enter y|20px wait 1s">CSS</span><span data-sr="enter s|.2 wait 1.4s">3</span>配套<span data-sr="enter x|100px wait .6s">动画</span>
+    </h1>
+
+    <div id="part1" class="part">
+        <div class="text">
+            <p class="title" data-sr="enter x|-50px">属性配置</p>
+            <p class="desc" data-sr="enter x|50px wait .5s">
+                <code class="code">
+                    &lt;div data-ctr="enter x|20px"&gt;da宗熊&lt;/div&gt;
+                </code>
+                <span data-sr="enter s|1.5 wait 1.5s">一句属性，进入、离开两种动画</span>
+            </p>
+        </div>
+        <img src="demo/1.jpg" class="image" data-sr="enter s|0 r|270deg over 1.5s tf linear wait 1s" />
+    </div>
+
+    <div id="part1" class="part">
+        <img src="demo/2.jpg" width="30%" class="image" data-sr="enter s|1.2 r|-45deg" />
+        <div class="text">
+            <p class="title" data-sr="enter x|50px s|1.1 wait .8s">多种动画</p>
+            <p class="desc" data-sr="enter x|-50px s|.5 wait 1.5s">
+                <code class="code">
+                &lt;div data-ctr="enter x|-50px s|1.1 r|40deg"&gt;..&lt;/div&gt;
+                </code>
+                <span data-sr="enter s|1.5 x|100px wait 2s">支持透明、translate、scale、rotate 4种动画</span>
+            </p>
+        </div>
+    </div>
+
+    <div id="part1" class="part">
+        <div class="text">
+            <p class="title" data-sr="enter y|-50px">多设备支持</p>
+            <div class="desc">
+                <div data-sr="enter y|50px wait .3s">支持IE10及以上版本IE</div>
+                <div data-sr="enter y|50px wait .6s">支持Firefox、Opera 和 Chrome</div>
+                <div data-sr="enter y|50px wait .9s">移动多友爱</div>
+                <div data-sr="enter y|50px wait 1.2s">对支持transition的浏览器友好~</div>
+            </div>
+        </div>
+        <img src="demo/3.jpg" class="image" data-sr="enter s|0 over .6s wait 1s" />
+    </div>
+
+    <div id="part1" class="part">
+        <img src="demo/4.jpg" class="image" data-sr="enter s|1.5 over 1.2s" />
+        <div class="text">
+            <p class="title" data-sr="enter s|1.2 x|100px wait .5s">可控性</p>
+            <div class="desc">
+                <code class="code" data-sr="s|.2 x|200px wait 1s">
+                var st = new Css3Transition();<br/>
+                st.enter();    // 进入
+                st.leave();    // 离开
+                </code>
+                <div data-sr="enter x|150px wait 1.5s">底层控件，友好API</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span data-sr="x|-100px">&gt;&gt;</span>
+        <a target="_blank" href="https://github.com/linfenpan/collection/tree/master/js%20about/scrollReveal/css3Animation%20for%20class">Github地址</a>
+        <span data-sr="x|100px wait .5s">&lt;&lt;</span>
+    </div>
+</body>
+<script src="css3Transition.js"></script>
+<script src="scrollEnter.js"></script>
+<script src="scrollTransition.js"></script>
+<script>
+    var st = new ScrollTransition({
+        delay: 0,
+        percent: 1
+    });
+</script>
+</html>
+'
+'

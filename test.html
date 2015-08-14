@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>滚动动画</title>
+    <style>
+        *{
+            padding:0;margin:0;
+        }
+        .box{
+            width:200px;
+            height:200px;
+            margin-top:100px;
+            border:1px solid #ccc;
+            font-size:40px;
+            line-height:200px;
+            text-align:center;
+        }
+        .box1{background:#ccc;}
+        .box2{background:#ECA9A9;}
+        .box3{background:#B0ECA9;}
+        .box4{background:#A9ECE9;}
+        .box5{background:#ECD2A9;}
+        .box6{background:#A6B0C8;}
+        .box7{background:#C8A6AB;}
+    </style>
+</head>
+<body>
+    <p class="box box1" data-sr="enter x|40% y|20% rx|10deg ry|10deg rz|10deg s|1.2 over .5s, leave r|10deg x|-100%" data-sd=".5">box1</p>
+    <p class="box box2" data-sr="" data-sd=".2">box2</p>
+    <p class="box box3" data-sr="">box3</p>
+    <p class="box box4" data-sr="">box4</p>
+    <p class="box box5" data-sr="">box5</p>
+    <p class="box box6" data-sr="">box5</p>
+    <p class="box box7" data-sr="">box5</p>
+</body>
+<script src="css3Transition.js"></script>
+<script src="scrollEnter.js"></script>
+<script src="scrollTransition.js"></script>
+<script type="text/javascript">
+    // var c3 = new Css3Transition({
+    //     key: "data-sr"
+    // });
+    // // c3.leave();
+    // var se = new ScrollEnter({
+    //     list: c3.getDomList(),
+    //     key: "data-sd",
+    //     enter: function(elem){
+    //         c3.enter(elem);
+    //     },
+    //     leave: function(elem){
+    //         c3.leave(elem);
+    //     }
+    // });
+    var st = new ScrollTransition();
+</script>
+</html>
