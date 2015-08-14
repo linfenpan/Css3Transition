@@ -153,5 +153,5 @@ c3t.enter([dom1, dom2, dom3...]); // 让这个列表内的元素，执行动画
 # 最后
 
 by: da宗熊
-date: 2015/08/13
-version: 0.0.2
+date: 2015/08/14
+version: 0.0.3
