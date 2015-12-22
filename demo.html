@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui"/><meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>动画生成器测试</title>
+</head>
+<body>
+    <div id="test">一个放弃的理由</div>
+</body>
+<script src="css2obj.js" charset="utf-8"></script>
+<script type="text/javascript">
+// (√)自动添加浏览器前缀？ transform --> -webkit-transform
+// (×)  or 转为浏览器前缀？ -webkit-transform --> webkitTransform
+
+// (×)属性含有子对象问题? transform: translate() scale(); --> transform: {translate:, scale:}
+// (√) scale: 1 ---> transform: scale(1);
+
+// (×)类似背景之类的属性，这之后可以拓展，
+//      background: url() no-repeat; --> backgroundImage, backgroundRepeat, backgroundPosition
+
+    var str = 'width: 100px; height: 100px; ';
+
+    // 字符串转对象
+    var setKeyAndValue = function(obj, key, val){
+        // 这个简单的接口对象，为了给下面重写
+        obj[key] = val;
+    };
+    function turnStr2Obj(str, sep1, sep2){
+        var obj = {}, list = str.split(sep1 || ";");
+        for(var i = 0, max = list.length, item, key, val; i < max; i++){
+            item = list[i].split(sep2 || ":");
+            key = item[0].trim();
+            val = item[1];
+            // 如果 key 是空，不需要设置
+            if(key){
+                setKeyAndValue(obj, key, (val || "").trim());
+            }
+        }
+        return obj;
+    };
+
+    // 把属性，转为 list
+    var key2ListMap = {
+        // scale:2, x:20 ---> transform: [[scale, 2], [translateX, 20]]
+        scale: "transform",
+        x: ["translateX", "transform"],
+        translateY: "transform",
+        time: "transition",
+        wait: "transition",
+        tf: "transition",
+    };
+    var setKeyAndValue = function(obj, key, val){
+        var item = key2ListMap[key];
+        if(item){
+            var rkey = item;
+            if(typeof item !== "string"){
+                key = item[0];
+                rkey = item[1];
+            }
+            if(!obj[rkey]){
+                obj[rkey] = [];
+            }
+            obj[rkey].push([key, val]);
+        }else{
+            obj[key] = val;
+        }
+    };
+
+    // 把对象转为样式
+    var changeObjet2Str = function(key, value){
+        return key + ":" + value;
+    };
+    function obj2Css(obj){
+        var list = [];
+        for(var i in obj){
+            if(obj.hasOwnProperty(i)){
+                var res = changeObjet2Str(i, obj[i]);
+                res && list.push( res );
+            }
+        }
+        // 计算 transition 的值
+        // 计算 animation 的值
+        list.push.apply(list, processObjBeforeStr(obj));
+
+        return list.join(";") + ";";
+    }
+    // key + value --> 样式
+    var keyValueMap = {
+        transform: function(list){
+            var res = [];
+            for(var i = 0, max = list.length; i < max; i++){
+                var item = list[i];
+                res.push( item[0] + "("+ item[1] +")" );
+            }
+            return res.join(" ");
+        }
+    }
+    var changeObjet2Str = function(key, val){
+        // 在后续的转换的话，忽略
+        if(objBeforeStrMap[key]){
+            return "";
+        }
+
+        if(keyValueMap[key]){
+            val = keyValueMap[key](val);
+        }
+        return autoPrefix(key) + ":" + val;
+    };
+
+    // 计算浏览器前缀
+    var cssPrefix = (function(window){
+        var style = document.documentElement.style;
+        var list = ["webkitT", "MozT", "msT", "oT", "t"], prefix = "";
+        for(var i = 0, max = list.length; i < max; i++){
+            if(style.hasOwnProperty(list[i] + "ransition")){
+                prefix = list[i].slice(0, -1).toLowerCase();
+                break;
+            }
+        }
+        return prefix ? ("-" + prefix + "-") : prefix;
+    })(window);
+    // 自动添加前缀
+    function autoPrefix(key){
+        if(/transform|transition/.test(key)){
+            return cssPrefix + key;
+        }
+        return key;
+    }
+
+    // 转换为 str 前的加工
+    var objBeforeStrMap = {
+        transition: function(obj, source){
+            var res;
+            if(obj.transition){
+                var ls = {time: 0, tf: 0, wait: 0};
+                for(var i = 0, max = obj.transition.length; i < max; i++){
+                    var item = obj.transition[i];
+                    ls[item[0]] = item[1];
+                }
+
+                var str = [ls.time || ".2s", ls.tf || "linear", ls.wait || ""].join(" ").trim();
+                res = [];
+                for(var i in source){
+                    res.push(autoPrefix(i) + " " + str);
+                }
+                return [autoPrefix("transition") + ":" + res.join(",")];
+            }
+            return res;
+        },
+    }
+    function reduceWithMap(obj){
+        var no = {};
+        for(var i in obj){
+            if(obj.hasOwnProperty(i) && !objBeforeStrMap[i]){
+                no[i] = obj[i];
+            }
+        }
+        return no;
+    }
+    function processObjBeforeStr(obj){
+        var res = [];
+        var source = reduceWithMap(obj);
+
+        for(var i in objBeforeStrMap){
+            var tmp = objBeforeStrMap[i](obj, source);
+            if(tmp){
+                res.push(tmp);
+            }
+        }
+        return res;
+    }
+
+    var obj = turnStr2Obj('width: 100px; height: 100px; scale: 1.5; x: 20px; translateY: 30px; time: 2s;', ";", ":");
+
+    console.log(cssParser('width: 100px; height: 100px; scale: 1.5; x: 20px; translateY: 30px; time: 2s;').toString());
+    
+    // console.log(obj2Css(obj));
+    setTimeout(function(){
+        var $test = document.getElementById("test");
+        var style = obj2Css(obj);
+        $test.setAttribute("style", style);
+        $test.innerHTML = style;
+    }, 2000);
+</script>
+</html>
