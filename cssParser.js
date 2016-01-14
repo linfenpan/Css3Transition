@@ -247,14 +247,14 @@
             var self = this;
 
             util.each(this.styleProperty, function(value, key){
-                var str = self.parsePropertyToString(key);
+                var str = self.stringifyProperty(key);
                 str && res.push(str);
             });
 
             return res.length > 0 ? (res.join(";") + ";") : "";
         },
         // {width:100px} --> "width:100px;"
-        parsePropertyToString: function(key){
+        stringifyProperty: function(key){
             var converter = PropertyConverterMap;
             var property = this.styleProperty;
             var value = property[key];
