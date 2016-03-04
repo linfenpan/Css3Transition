@@ -16,7 +16,7 @@
             var cssPrefix = "";
             // 计算前缀
             var style = document.documentElement.style;
-            var list = ["webkitT", "MozT", "msT", "oT", "t"];
+            var list = ["t", "webkitT", "MozT", "msT", "oT"];
             for(var i = 0, max = list.length; i < max; i++){
                 if(style.hasOwnProperty(list[i] + "ransition")){
                     cssPrefix = list[i].slice(0, -1).toLowerCase();
@@ -85,6 +85,7 @@
     //      1. s: ["scale", "transform"]  =======> "s:2" --> {transform: {scale: 2}}
     //      2. x: "left"    ==========> "x: 20px" --> {top: 20px}
     var PropertyAliasMap = {
+        o: "opacity",
         s:  ["scale", "transform"],
         sx: ["scaleX", "transform"],
         sy: ["scaleY", "transform"],
@@ -96,7 +97,7 @@
         time: ["time", "transition"],
         wait: ["wait", "transition"],
         tf: ["tf", "transition"],
-        property: ["property", "transition"]
+        property: ["property", "transition"],
     };
 
     // property 转换器
@@ -141,7 +142,7 @@
 
     function CssParser(css){
         this.reset();
-        css && this.setCss(css);
+        css && this.css(css);
     };
     CssParser.prototype = {
         reset: function(){
@@ -149,10 +150,6 @@
             return this;
         },
         css: function(css){
-            if (!css) {
-                throw "parser.css的参数不能为空";
-            }
-
             var cssList = css.split(";");
             var self = this;
 

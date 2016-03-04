@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CssParser测试</title>
+    <style>
+        * { padding: 0; margin: 0; }
+
+        .parsers { padding: 20px; }
+        .parsers .code, .parsers .parse, .parsers .res { float: left; }
+        .parsers .item { padding: 5px; }
+        .parsers .item:after { content: ""; clear: both; display: table; }
+        .parsers .code, .parsers .res { padding: 5px 10px; border: 1px solid #ddd; background: #eee; }
+        .parsers .parse { margin: 5px; color: #222; }
+
+        .animate { padding: 20px; }
+        .animate .btn { border: 1px solid #FFE5E5; padding: 5px; color: #CE771E; background: #FFF7F7; text-decoration: none; }
+        #testAnimate { display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <div class="parsers">
+        <p>点击转化，看效果[x/y/s/sx/sy/r/rx/ry/o等，是内置的名字]:<br/><br/></p>
+        <div class="item">
+            <span class="code">x: 0; y: 0;</span>
+            <a href="javascript:;" class="parse">-转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">o: 0; y: 0; time: 2s;</span>
+            <a href="javascript:;" class="parse">-转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">x: 100px; wait: 1s;</span>
+            <a href="javascript:;" class="parse">-转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">r: 10deg; s: 1.5;</span>
+            <a href="javascript:;" class="parse">-转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">rx: 10deg; sy: 1.5;</span>
+            <a href="javascript:;" class="parse">-转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">rx: 10deg; sy: 1.5;</span>
+            <a href="javascript:;" class="parse">-转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">sk: 10deg;</span>
+            <a href="javascript:;" class="parse">-自定义sk转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+        <div class="item">
+            <span class="code">posX: 10px; posY: 20px;</span>
+            <a href="javascript:;" class="parse">-自定义posX,posY转化-></a>
+            <span class="res">&nbsp;</span>
+        </div>
+    </div>
+
+    <div class="animate">
+        <a href="javascript:;" class="btn">试试连着动画使用</a>
+        <div id="testAnimate">测试文字</div>
+    </div>
+
+    <br><br><br>
+    更多api，请查看: <a href="https://github.com/linfenpan/Css3Transition">github</a>
+
+
+    <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <script src="./cssParser.min.js"></script>
+    <script>
+        CssParser.addAlias("sk", ["skew", "transform"]);
+        CssParser.addAlias("posX", "left");
+        CssParser.addAlias("posY", "top");
+
+        $(".parsers").on("click", ".parse", function(){
+            var $elem = $(this), $code = $elem.prev(".code"), $res = $elem.next(".res");
+            var parser = new CssParser( $.trim($code.html()) );
+            $res.html(parser.toString());
+        });
+
+
+        // 执行个动画
+        var parser = new CssParser();
+        var animations = [
+            "color:#000;x:6em;time:.5s;tf:ease;",
+            "color:#f00;y:3em;",
+            "color:#ff8e00;x:10em;",
+            "s:2",
+            "color:#f00"
+        ];
+        var element = document.querySelector("#testAnimate");
+        var index = 0;
+        function executeAnimate(){
+            if (animations.length > 0) {
+                var style = animations.shift();
+                console.log(style);
+                // transition里的每个属性，都会出发一次 transitionend 事件
+                //  所以，调用一次之后，记得移除，再重新绑定
+                element.addEventListener("transitionend", function(){
+                    element.removeEventListener("transitionend", arguments.callee);
+                    console.log(++index);
+                    setTimeout(function(){
+                        executeAnimate();
+                    }, 1);
+                });
+                setTimeout(function(){
+                    element.getClientRects();
+                    element.setAttribute("style", parser.css(style).toString());
+                }, 1);
+            }
+        };
+        $(".animate .btn").one("click", executeAnimate);
+
+
+        CssParser.addAlias("aname", ["name", "animation"]);
+        CssParser.addAlias("atime", ["time", "animation"]);
+        CssParser.addConverter("animation", function(options){
+            // {"name":" jump","time":" 1s"}
+            return options.name + " " + options.time + " ease";
+        });
+        var parser2 = new CssParser("aname: jump; atime: 1s;");
+        parser2.toString();
+    </script>
+</body>
+</html>
