@@ -13,23 +13,23 @@
     var util = {
         // 前缀
         prefix: function(key){
-            var cssPrefix = "";
+            var prefix = "";
             // 计算前缀
             var style = document.documentElement.style;
-            var list = ["t", "webkitT", "MozT", "msT", "oT"];
+            var list = ["webkitT", "MozT", "msT", "oT", "t"];
             for(var i = 0, max = list.length; i < max; i++){
                 if(style.hasOwnProperty(list[i] + "ransition")){
-                    cssPrefix = list[i].slice(0, -1).toLowerCase();
+                    prefix = list[i].slice(0, -1);
                     break;
                 }
             }
-            cssPrefix && (cssPrefix = "-" + cssPrefix + "-");
+            var cssPrefix = "-" + prefix.toLowerCase() + "-";
 
             this.prefix = function(k){
-                if(/transform|transition|animation/.test(k)){
-                    return cssPrefix + k;
-                }
-                return k;
+                if (style.hasOwnProperty(k)) {
+					return k;
+				}
+                return cssPrefix + k;
             };
             return this.prefix(key);
         },
