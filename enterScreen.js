@@ -2,6 +2,7 @@
  * @author da宗熊
  * @update 2016/03/04
  * @description 检测元素列表，是否进入视区
+ * https://github.com/linfenpan/Css3Transition/blob/master/enterScreen.js
 */
 ;(function(window, NAME){
     function extend(source, target) {
