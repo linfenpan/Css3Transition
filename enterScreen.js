@@ -4,6 +4,14 @@
  * @description 检测元素列表，是否进入视区
 */
 ;(function(window, NAME){
+    function extend(source, target) {
+      for (var key in source) {
+        if (target.hasOwnProperty(key)) {
+          source[key] = target[key];
+        }
+      }
+      return source;
+    }
 
     // 每次调用 checker 前，先调用 ready()，能有效减少计算
     function ViewportChecker(rootDom){
@@ -69,7 +77,7 @@
             root.addEventListener(event, fn, false);
         }
         removeEventListener = function(root, event, fn){
-            root.removeEventListener(event, fn, false);
+            root.removeEventListener(event, fn);
         }
     } else {
         addEventListener = function(root, event, fn) {
@@ -101,7 +109,8 @@
     };
     EnterScreen.prototype = {
         reset: function(options, autoStart){
-            var options = $.extend(this.options, options || {});
+            var options = extend(this.options, options || {});
+            options.elems = [].slice.call(options.elems || [], 0);
             this.checker = new ViewportChecker(options.root);
             autoStart && this.start();
         },
@@ -132,10 +141,12 @@
             self.scrollCheckFn();
         },
         stop: function(){
-            var root = this.getRootElem();
+            var self = this;
+            var root = self.getRootElem();
             // 移除事件监听
-            clearTimeout(self.self.srollCheckTimer);
-            removeEventListener(root, this.scrollCheckFn);
+            clearTimeout(self.srollCheckTimer);
+            removeEventListener(root, "scroll", self.scrollCheckFn);
+            removeEventListener(root, "resize", self.scrollCheckFn);
         },
         checkAll: function(){
             var checker = this.checker.ready();
